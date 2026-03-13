@@ -1,1 +1,813 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="./style.css"><link rel="icon" type="image/svg+xml" href="https://github.githubassets.com/favicons/favicon.svg"><title>Github Repos Timeline</title></head><body><section class="intro"><div class="container"><h1>Github Repos Timeline &darr;</h1></div><div class="container" id="form_div"><form><input type="text" name="username" id="user" value="Github" placeholder="Github Username"><br><label class="container">Ascending <input id="asc" class="option-input radio" checked="true" type="radio" name="radio" value="asc"></label><label class="container">Descending <input id="desc" class="option-input radio" type="radio" name="radio" value="desc"></label><br><input type="submit" value="Generate"></form></div><div class="container" id="form_div"><button onclick="view_on_github()">View on Github</button><br></div></section><section class="timeline"><ul id="timeline"></ul></section><footer class="page-footer"><span>Made by</span><a style="color:#fff" href="https://github.com/Semanteo/" target="__blank">Semanteo</a></footer><footer class="page-footer-2"><span>Inspired by</span><a style="color:#fff" href="https://github.com/florinpop17/app-ideas/blob/master/Projects/3-Advanced/GitHub-Timeline-App.md" target="__blank">https://github.com/florinpop17/app-ideas</a></footer><footer class="page-footer-3"><span>Front Inspired by</span><a href="https://georgemartsoukos.com/" target="_blank"><img width="24" height="24" src="https://assets.codepen.io/162656/george-martsoukos-small-logo.svg" alt="George Martsoukos logo"></a></footer><script defer="defer" src="./script.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chuyện Tình Yêu · Trung Dũng & Phương Thảo</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Dancing+Script:wght@600;700&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1a0205;--red:#8b0c11;--red2:#6b0909;
+  --gold:#c9a96e;--goldlt:#e8d5b0;--goldpale:#f9f2e5;
+  --cream:#fdf8f1;--white:#fff;
+  --fh:'Cormorant Garamond',serif;
+  --fs:'Dancing Script',cursive;
+  --fn:'Be Vietnam Pro',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--cream);color:var(--ink);font-family:var(--fn);overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+
+/* PROGRESS */
+#progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--red),var(--gold));z-index:9999;width:0%;}
+
+/* PETALS */
+#petalCanvas{position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;}
+
+/* ── HERO ── */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;background:linear-gradient(170deg,var(--red2) 0%,var(--red) 48%,#5a0608 100%);padding:60px 24px;text-align:center;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,rgba(201,169,110,.13),transparent 68%);pointer-events:none;}
+.hero-arc{position:absolute;border-radius:50%;border:1px solid rgba(201,169,110,.15);pointer-events:none;}
+.arc1{width:480px;height:480px;top:50%;left:50%;transform:translate(-50%,-50%);}
+.arc2{width:700px;height:700px;top:50%;left:50%;transform:translate(-50%,-50%);}
+.arc3{width:920px;height:920px;top:50%;left:50%;transform:translate(-50%,-50%);}
+/* ── RIPPLE CANVAS ── */
+#rippleCanvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;}
+.hero-eyebrow{font-size:11px;font-weight:600;letter-spacing:.55em;text-transform:uppercase;color:var(--goldlt);margin-bottom:18px;position:relative;z-index:2;animation:fadeUp .9s .1s both;}
+.hero-chi{font-family:var(--fh);font-size:clamp(64px,13vw,120px);color:var(--gold);line-height:1;position:relative;z-index:2;animation:fadeUp .9s .25s both;text-shadow:0 6px 40px rgba(0,0,0,.45);}
+.hero-names{font-family:var(--fs);font-size:clamp(26px,6vw,58px);font-weight:700;color:var(--white);margin:10px 0 8px;position:relative;z-index:2;animation:fadeUp .9s .4s both;text-shadow:0 4px 20px rgba(0,0,0,.35);}
+.hero-heart{display:inline-block;color:var(--gold);margin:0 12px;animation:hb 1.8s ease-in-out infinite;}
+@keyframes hb{0%,100%{transform:scale(1);}50%{transform:scale(1.35);}}
+.hero-sub{font-family:var(--fh);font-size:clamp(14px,2.4vw,20px);font-style:italic;font-weight:300;color:rgba(255,255,255,.7);position:relative;z-index:2;margin-bottom:30px;animation:fadeUp .9s .55s both;}
+.hero-date{font-size:13px;font-weight:600;letter-spacing:.3em;color:var(--gold);position:relative;z-index:2;margin-bottom:44px;animation:fadeUp .9s .65s both;}
+.hero-scroll{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;animation:fadeUp .9s .85s both;}
+.hero-scroll span{font-size:10px;font-weight:600;letter-spacing:.4em;text-transform:uppercase;color:rgba(255,255,255,.4);}
+.scroll-line{width:1px;height:48px;background:linear-gradient(to bottom,rgba(201,169,110,.6),transparent);animation:sd 2s ease-in-out infinite;}
+@keyframes sd{0%{transform:scaleY(0);transform-origin:top;}50%{transform:scaleY(1);transform-origin:top;}51%{transform:scaleY(1);transform-origin:bottom;}100%{transform:scaleY(0);transform-origin:bottom;}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:none;}}
+
+/* ── SECTION HEADER ── */
+.sec-header{text-align:center;padding:80px 24px 12px;position:relative;z-index:1;}
+.sec-eyebrow{font-size:10px;font-weight:700;letter-spacing:.55em;text-transform:uppercase;color:var(--red);display:block;margin-bottom:10px;}
+.sec-title{font-family:var(--fh);font-size:clamp(32px,6vw,54px);font-weight:600;color:var(--ink);}
+.sec-title em{color:var(--red);font-style:italic;}
+.orn{display:flex;align-items:center;gap:12px;justify-content:center;margin:18px auto;max-width:260px;}
+.orn::before{content:'';flex:1;height:1px;background:linear-gradient(to right,transparent,var(--gold));}
+.orn::after{content:'';flex:1;height:1px;background:linear-gradient(to left,transparent,var(--gold));}
+.orn-dia{width:7px;height:7px;background:var(--gold);transform:rotate(45deg);flex-shrink:0;}
+
+/* ── TIMELINE ── */
+.timeline{max-width:980px;margin:0 auto;padding:20px 24px 100px;position:relative;z-index:1;}
+.timeline::before{content:'';position:absolute;left:50%;top:0;bottom:0;width:2px;transform:translateX(-50%);background:linear-gradient(to bottom,transparent,var(--gold) 8%,var(--goldlt) 50%,var(--gold) 92%,transparent);}
+
+/* ── MILESTONE ── */
+.milestone{display:grid;grid-template-columns:1fr 60px 1fr;align-items:center;margin-bottom:80px;position:relative;opacity:0;transform:translateY(32px);transition:opacity .8s,transform .8s;}
+.milestone.visible{opacity:1;transform:none;}
+.milestone:nth-child(odd)  .ms-card{grid-column:1;text-align:right;}
+.milestone:nth-child(odd)  .ms-empty{grid-column:3;}
+.milestone:nth-child(even) .ms-card{grid-column:3;text-align:left;}
+.milestone:nth-child(even) .ms-empty{grid-column:1;}
+.ms-node{grid-column:2;display:flex;flex-direction:column;align-items:center;gap:6px;position:relative;z-index:2;}
+.ms-dot{width:20px;height:20px;border-radius:50%;background:var(--red);border:3px solid var(--gold);box-shadow:0 0 0 5px var(--cream),0 0 0 6px rgba(201,169,110,.3);flex-shrink:0;transition:transform .3s,box-shadow .3s;}
+.milestone:hover .ms-dot{transform:scale(1.28);box-shadow:0 0 0 6px var(--cream),0 0 0 8px var(--gold);}
+.ms-year{font-size:11px;font-weight:700;color:var(--red);letter-spacing:.1em;white-space:nowrap;}
+
+/* ── CARD ── */
+.ms-card{position:relative;}
+.ms-inner{background:var(--white);border:1px solid var(--goldlt);overflow:hidden;position:relative;box-shadow:0 4px 28px rgba(139,12,17,.07);transition:transform .35s,box-shadow .35s;}
+.ms-inner:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(139,12,17,.14);}
+.ms-inner::before{content:'';position:absolute;inset:5px;border:1px solid rgba(201,169,110,.2);pointer-events:none;z-index:0;}
+
+/* Connector arrow */
+.milestone:nth-child(odd)  .ms-card::after{content:'';position:absolute;right:-18px;top:40%;transform:translateY(-50%);border:9px solid transparent;border-left-color:var(--goldlt);}
+.milestone:nth-child(even) .ms-card::after{content:'';position:absolute;left:-18px;top:40%;transform:translateY(-50%);border:9px solid transparent;border-right-color:var(--goldlt);}
+
+/* ── ALBUM COVER ── */
+.ms-album{position:relative;width:100%;aspect-ratio:4/3;overflow:hidden;background:linear-gradient(135deg,var(--goldpale),#ede0c8);cursor:pointer;}
+.ms-album-cover{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s;}
+.ms-inner:hover .ms-album-cover{transform:scale(1.04);}
+.ms-album-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(26,2,5,.65) 0%,transparent 55%);pointer-events:none;z-index:1;}
+
+/* Placeholder */
+.ms-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;pointer-events:none;z-index:0;}
+.ph-icon{font-size:36px;opacity:.35;}
+.ph-txt{font-size:11px;font-weight:500;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;opacity:.55;}
+
+/* Number badge */
+.ms-badge{position:absolute;top:12px;font-family:var(--fh);font-size:13px;font-weight:600;color:var(--gold);background:rgba(26,2,5,.55);backdrop-filter:blur(6px);padding:3px 10px;letter-spacing:.08em;z-index:3;}
+.milestone:nth-child(odd)  .ms-badge{left:12px;}
+.milestone:nth-child(even) .ms-badge{right:12px;}
+
+/* Photo count chip */
+.ms-count{position:absolute;bottom:10px;right:10px;z-index:3;display:flex;align-items:center;gap:5px;background:rgba(26,2,5,.62);backdrop-filter:blur(8px);border:1px solid rgba(201,169,110,.35);border-radius:20px;padding:4px 10px;font-size:11px;font-weight:600;color:var(--goldlt);cursor:pointer;}
+.ms-count svg{width:13px;height:13px;fill:none;stroke:var(--goldlt);stroke-width:1.8;flex-shrink:0;}
+
+/* View album hover CTA */
+.ms-album-cta{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .3s;background:rgba(26,2,5,.25);}
+.ms-album:hover .ms-album-cta{opacity:1;}
+.ms-cta-pill{display:flex;align-items:center;gap:8px;background:rgba(201,169,110,.96);color:var(--red2);font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding:8px 20px;border-radius:30px;box-shadow:0 4px 20px rgba(0,0,0,.35);}
+
+/* ── THUMBNAIL STRIP ── */
+.ms-thumbs{display:flex;gap:4px;padding:6px 6px 0;overflow-x:auto;scrollbar-width:none;background:var(--white);}
+.ms-thumbs::-webkit-scrollbar{display:none;}
+.ms-thumb{flex-shrink:0;width:52px;height:40px;border-radius:3px;overflow:hidden;cursor:pointer;border:2px solid transparent;transition:border-color .2s,transform .2s;background:var(--goldpale);}
+.ms-thumb.active{border-color:var(--gold);}
+.ms-thumb:hover{transform:scale(1.06);}
+.ms-thumb img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;}
+.ms-thumb-ph{flex-shrink:0;width:52px;height:40px;border-radius:3px;border:1.5px dashed var(--goldlt);display:flex;align-items:center;justify-content:center;font-size:17px;color:var(--goldlt);background:var(--goldpale);}
+
+/* ── CARD BODY ── */
+.ms-body{padding:14px 18px 18px;position:relative;z-index:1;text-align:left;}
+.ms-tag{font-size:9px;font-weight:700;letter-spacing:.42em;text-transform:uppercase;color:var(--red);margin-bottom:5px;display:block;}
+.ms-title{font-family:var(--fh);font-size:clamp(17px,2.8vw,25px);font-weight:600;color:var(--ink);line-height:1.2;margin-bottom:7px;}
+.ms-title em{color:var(--red);font-style:italic;}
+.ms-desc{font-size:13px;font-weight:300;color:#6b4045;line-height:1.8;}
+.ms-emoji{font-size:17px;margin-bottom:3px;display:block;}
+
+/* Mobile */
+@media(max-width:680px){
+  .timeline::before{left:28px;}
+  .milestone{grid-template-columns:56px 1fr;}
+  .milestone:nth-child(odd) .ms-card,
+  .milestone:nth-child(even) .ms-card{grid-column:2;grid-row:1;text-align:left;}
+  .milestone:nth-child(odd) .ms-empty,
+  .milestone:nth-child(even) .ms-empty{display:none;}
+  .ms-node{grid-column:1;grid-row:1;align-self:start;padding-top:14px;}
+  .milestone:nth-child(odd) .ms-card::after,
+  .milestone:nth-child(even) .ms-card::after{left:-18px;right:auto;border-right-color:var(--goldlt);border-left-color:transparent;}
+  .milestone:nth-child(odd) .ms-badge,
+  .milestone:nth-child(even) .ms-badge{left:12px;right:auto;}
+}
+
+/* ══════════════════════════════
+   LIGHTBOX
+══════════════════════════════ */
+#lightbox{
+  display:none;position:fixed;inset:0;z-index:10000;
+  background:rgba(8,1,2,.95);
+  backdrop-filter:blur(14px);
+  flex-direction:column;
+}
+#lightbox.open{display:flex;}
+
+/* Top bar */
+.lb-bar{
+  flex-shrink:0;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 20px;
+  background:linear-gradient(to bottom,rgba(0,0,0,.65),transparent);
+}
+.lb-bar-title{font-family:var(--fh);font-size:18px;font-style:italic;font-weight:300;color:var(--goldlt);}
+.lb-bar-right{display:flex;align-items:center;gap:16px;}
+.lb-counter{font-size:12px;font-weight:600;letter-spacing:.18em;color:rgba(255,255,255,.45);}
+.lb-close{background:none;border:none;cursor:pointer;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.65);font-size:20px;line-height:1;transition:background .2s,color .2s;}
+.lb-close:hover{background:rgba(255,255,255,.1);color:var(--white);}
+
+/* Main stage */
+.lb-stage{
+  flex:1;min-height:0;
+  position:relative;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+  padding:0 70px;
+}
+.lb-img{
+  max-width:100%;max-height:100%;object-fit:contain;
+  display:block;border-radius:2px;
+  box-shadow:0 20px 80px rgba(0,0,0,.7);
+  animation:lbIn .28s ease;
+  user-select:none;-webkit-user-drag:none;
+}
+@keyframes lbIn{from{opacity:0;transform:scale(.94);}to{opacity:1;transform:none;}}
+.lb-placeholder{display:flex;flex-direction:column;align-items:center;gap:16px;color:rgba(255,255,255,.3);}
+.lb-placeholder .lbph-ico{font-size:54px;}
+.lb-placeholder p{font-size:13px;font-weight:300;letter-spacing:.06em;}
+
+/* Arrows */
+.lb-arr{
+  position:absolute;top:50%;transform:translateY(-50%);
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);
+  backdrop-filter:blur(8px);
+  width:50px;height:50px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--white);font-size:20px;
+  transition:background .2s,border-color .2s,transform .2s;
+  z-index:2;user-select:none;border:none;
+}
+.lb-arr:hover{background:rgba(201,169,110,.28);transform:translateY(-50%) scale(1.1);}
+.lb-arr.hide{opacity:0;pointer-events:none;}
+#lbPrev{left:12px;}
+#lbNext{right:12px;}
+
+/* Filmstrip */
+.lb-film{
+  flex-shrink:0;
+  display:flex;gap:6px;align-items:center;
+  padding:10px 16px 18px;
+  overflow-x:auto;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(201,169,110,.3) transparent;
+}
+.lb-film::-webkit-scrollbar{height:3px;}
+.lb-film::-webkit-scrollbar-thumb{background:rgba(201,169,110,.35);border-radius:2px;}
+.lb-ft{
+  flex-shrink:0;width:66px;height:50px;border-radius:4px;overflow:hidden;
+  cursor:pointer;border:2px solid transparent;opacity:.5;
+  transition:opacity .2s,border-color .2s,transform .2s;
+  background:#2a0507;
+}
+.lb-ft img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;}
+.lb-ft:hover{opacity:.85;transform:scale(1.05);}
+.lb-ft.active{border-color:var(--gold);opacity:1;}
+
+/* ── ENDING ── */
+.ending{background:linear-gradient(170deg,var(--red2),var(--red));text-align:center;padding:90px 24px 80px;position:relative;overflow:hidden;}
+.ending::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(201,169,110,.15),transparent 65%);}
+.ending-chi{font-family:var(--fh);font-size:clamp(70px,14vw,130px);color:rgba(201,169,110,.18);line-height:1;margin-bottom:-10px;position:relative;z-index:1;}
+.ending-title{font-family:var(--fs);font-size:clamp(28px,6vw,54px);font-weight:700;color:var(--white);position:relative;z-index:1;margin-bottom:12px;text-shadow:0 4px 20px rgba(0,0,0,.3);}
+.ending-sub{font-family:var(--fh);font-size:clamp(16px,2.5vw,22px);font-style:italic;font-weight:300;color:var(--goldlt);position:relative;z-index:1;margin-bottom:32px;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.7;}
+.ending-date{font-size:14px;font-weight:600;letter-spacing:.35em;color:var(--gold);position:relative;z-index:1;margin-bottom:40px;}
+.btn-row{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;position:relative;z-index:1;}
+.back-btn{display:inline-flex;align-items:center;gap:10px;padding:14px 36px;border:1.5px solid var(--gold);background:transparent;color:var(--white);font-size:13px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;text-decoration:none;border-radius:2px;transition:all .25s;}
+.back-btn:hover{background:var(--gold);color:var(--red2);}
+.back-btn-ghost{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.3);color:rgba(255,255,255,.76);}
+.back-btn-ghost:hover{background:var(--white);border-color:var(--white);color:var(--red2);}
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+<canvas id="petalCanvas"></canvas>
+
+<!-- HERO -->
+<section class="hero">
+  <canvas id="rippleCanvas"></canvas>
+  <div class="arc1 hero-arc"></div><div class="arc2 hero-arc"></div><div class="arc3 hero-arc"></div>
+  <p class="hero-eyebrow">✦ &nbsp; Câu Chuyện Tình Yêu &nbsp; ✦</p>
+  <div class="hero-chi">囍</div>
+  <h1 class="hero-names">Trung Dũng <span class="hero-heart">♥</span> Phương Thảo</h1>
+  <p class="hero-sub">Một hành trình bắt đầu từ những điều nhỏ bé<br>và kết thúc bằng mãi mãi</p>
+  <div class="hero-date">22 · 03 · 2026</div>
+  <div class="hero-scroll"><span>Cuộn xuống</span><div class="scroll-line"></div></div>
+</section>
+
+<!-- HEADER -->
+<div class="sec-header">
+  <span class="sec-eyebrow">✦ &nbsp; Từng Khoảnh Khắc &nbsp; ✦</span>
+  <h2 class="sec-title">Hành Trình <em>Của Chúng Tôi</em></h2>
+  <div class="orn"><div class="orn-dia"></div></div>
+</div>
+
+<!--
+  ╔═══════════════════════════════════════════════════════╗
+  ║  CÁCH THÊM ẢNH VÀO TỪNG MỐC:                        ║
+  ║  data-photos="anh1.jpg,anh2.jpg,anh3.jpg"            ║
+  ║  Thêm <div class="ms-thumb"> trong .ms-thumbs         ║
+  ╚═══════════════════════════════════════════════════════╝
+-->
+<section class="timeline" id="timeline">
+
+  <!-- ① Lần đầu gặp nhau -->
+  <div class="milestone"
+       data-title="Lần Đầu Gặp Nhau · 2021"
+       data-photos="LXD_6256.jpg,LXD_6256.jpg,LXD_6256.jpg">
+    <div class="ms-card">
+      <div class="ms-inner">
+        <div class="ms-album" onclick="openAlbum(this)">
+          <img class="ms-album-cover" src="LXD_6256.jpg" onerror="this.style.display='none'" alt="">
+          <div class="ms-placeholder"><span class="ph-icon">🌸</span><span class="ph-txt">Thêm ảnh tại đây</span></div>
+          <div class="ms-album-overlay"></div>
+          <div class="ms-badge">01</div>
+          <div class="ms-count"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>3 ảnh</div>
+          <div class="ms-album-cta"><div class="ms-cta-pill">🖼 Xem Album</div></div>
+        </div>
+        <div class="ms-thumbs">
+          <div class="ms-thumb active" onclick="switchThumb(this,0)"><img src="LXD_6256.jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this,1)"><img src="LXD_6256.jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this,2)"><img src="LXD_6256.jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb-ph">+</div>
+        </div>
+        <div class="ms-body">
+          <span class="ms-emoji">🌸</span>
+          <span class="ms-tag">Khởi Đầu</span>
+          <h3 class="ms-title">Lần Đầu <em>Gặp Nhau</em></h3>
+          <p class="ms-desc">Hai người xa lạ tình cờ cùng tham gia một buổi tụ họp của nhóm bạn chung. Chẳng ai ngờ cuộc gặp gỡ giản đơn ấy lại là khởi đầu cho tất cả những điều sau này.</p>
+        </div>
+      </div>
+    </div>
+    <div class="ms-node"><div class="ms-dot"></div><div class="ms-year">2021</div></div>
+    <div class="ms-empty"></div>
+  </div>
+
+  <!-- ② Tin nhắn đêm khuya -->
+  <div class="milestone"
+       data-title="Những Tin Nhắn Đêm Khuya · 2021"
+       data-photos=",,">
+    <div class="ms-empty"></div>
+    <div class="ms-node"><div class="ms-dot"></div><div class="ms-year">2021</div></div>
+    <div class="ms-card">
+      <div class="ms-inner">
+        <div class="ms-album" onclick="openAlbum(this)">
+          <img class="ms-album-cover" src="" onerror="this.style.display='none'" alt="">
+          <div class="ms-placeholder"><span class="ph-icon">💬</span><span class="ph-txt">Thêm ảnh tại đây</span></div>
+          <div class="ms-album-overlay"></div>
+          <div class="ms-badge">02</div>
+          <div class="ms-count"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>3 ảnh</div>
+          <div class="ms-album-cta"><div class="ms-cta-pill">🖼 Xem Album</div></div>
+        </div>
+        <div class="ms-thumbs">
+          <div class="ms-thumb active" onclick="switchThumb(this,0)"><img src="" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this,1)"><img src="" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this,2)"><img src="" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb-ph">+</div>
+        </div>
+        <div class="ms-body">
+          <span class="ms-emoji">💬</span>
+          <span class="ms-tag">Tình Bạn</span>
+          <h3 class="ms-title">Những Tin Nhắn <em>Đêm Khuya</em></h3>
+          <p class="ms-desc">Từ những tin nhắn hỏi thăm ngắn ngủi, hai người dần trở nên thân thiết hơn. Những cuộc trò chuyện kéo dài đến tận nửa đêm về đủ mọi chuyện trên đời.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ③ Buổi hẹn đầu tiên -->
+  <div class="milestone"
+       data-title="Buổi Hẹn Đầu Tiên · 2022"
+       data-photos=",,">
+    <div class="ms-card">
+      <div class="ms-inner">
+        <div class="ms-album" onclick="openAlbum(this)">
+          <img class="ms-album-cover" src="" onerror="this.style.display='none'" alt="">
+          <div class="ms-placeholder"><span class="ph-icon">☕</span><span class="ph-txt">Thêm ảnh tại đây</span></div>
+          <div class="ms-album-overlay"></div>
+          <div class="ms-badge">03</div>
+          <div class="ms-count"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>3 ảnh</div>
+          <div class="ms-album-cta"><div class="ms-cta-pill">🖼 Xem Album</div></div>
+        </div>
+        <div class="ms-thumbs">
+          <div class="ms-thumb active" onclick="switchThumb(this,0)"><img src="" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this,1)"><img src="" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this,2)"><img src="" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb-ph">+</div>
+        </div>
+        <div class="ms-body">
+          <span class="ms-emoji">☕</span>
+          <span class="ms-tag">Hẹn Hò</span>
+          <h3 class="ms-title">Buổi Hẹn Đầu <em>Tiên</em></h3>
+          <p class="ms-desc">Một buổi chiều uống cà phê tưởng chừng bình thường nhưng lại khiến cả hai đều không muốn về. Lần đầu tiên Trung Dũng nhận ra trái tim mình đang đập khác đi.</p>
+        </div>
+      </div>
+    </div>
+    <div class="ms-node"><div class="ms-dot"></div><div class="ms-year">2022</div></div>
+    <div class="ms-empty"></div>
+  </div>
+
+  <!-- ④ Chính thức yêu nhau -->
+  <div class="milestone"
+       data-title="Chúng Mình Yêu Nhau · 2022"
+       data-photos=",,">
+    <div class="ms-empty"></div>
+    <div class="ms-node"><div class="ms-dot"></div><div class="ms-year">2022</div></div>
+    <div class="ms-card">
+      <div class="ms-inner">
+        <div class="ms-album" onclick="openAlbum(this)">
+          <img class="ms-album-cover" src="" onerror="this.style.display='none'" alt="">
+          <div class="ms-placeholder"><span class="ph-icon">💑</span><span class="ph-txt">Thêm ảnh tại đây</span></div>
+          <div class="ms-album-overlay"></div>
+          <div class="ms-badge">04</div>
+          <div class="ms-count"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>3 ảnh</div>
+          <div class="ms-album-cta"><div class="ms-cta-pill">🖼 Xem Album</div></div>
+        </div>
+        <div class="ms-thumbs">
+          <div class="ms-thumb active" onclick="switchThumb(this,0)"><img src="" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this,1)"><img src="" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this,2)"><img src="" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb-ph">+</div>
+        </div>
+        <div class="ms-body">
+          <span class="ms-emoji">💑</span>
+          <span class="ms-tag">Chính Thức</span>
+          <h3 class="ms-title">Chúng Mình <em>Yêu Nhau</em></h3>
+          <p class="ms-desc">Dưới bầu trời đêm đầy sao, Trung Dũng đã nói lên những gì cất giữ trong lòng bấy lâu. Phương Thảo gật đầu với nụ cười rạng rỡ nhất từ trước đến giờ.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ⑤ Một năm bên nhau -->
+  <div class="milestone"
+       data-title="Một Năm Bên Nhau · 2023"
+       data-photos=",,">
+    <div class="ms-card">
+      <div class="ms-inner">
+        <div class="ms-album" onclick="openAlbum(this)">
+          <img class="ms-album-cover" src="" onerror="this.style.display='none'" alt="">
+          <div class="ms-placeholder"><span class="ph-icon">🎂</span><span class="ph-txt">Thêm ảnh tại đây</span></div>
+          <div class="ms-album-overlay"></div>
+          <div class="ms-badge">05</div>
+          <div class="ms-count"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>3 ảnh</div>
+          <div class="ms-album-cta"><div class="ms-cta-pill">🖼 Xem Album</div></div>
+        </div>
+        <div class="ms-thumbs">
+          <div class="ms-thumb active" onclick="switchThumb(this,0)"><img src="" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this,1)"><img src="" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this,2)"><img src="" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb-ph">+</div>
+        </div>
+        <div class="ms-body">
+          <span class="ms-emoji">🎂</span>
+          <span class="ms-tag">Kỷ Niệm</span>
+          <h3 class="ms-title">Một Năm <em>Bên Nhau</em></h3>
+          <p class="ms-desc">Kỷ niệm một năm yêu nhau, họ cùng nhau trải qua chuyến du lịch đầu tiên. Những khoảnh khắc ấy trở thành ký ức đẹp nhất mà cả hai đều trân trọng.</p>
+        </div>
+      </div>
+    </div>
+    <div class="ms-node"><div class="ms-dot"></div><div class="ms-year">2023</div></div>
+    <div class="ms-empty"></div>
+  </div>
+
+  <!-- ⑥ Ra mắt gia đình -->
+  <div class="milestone"
+       data-title="Ra Mắt Hai Gia Đình · 2023"
+       data-photos=",,">
+    <div class="ms-empty"></div>
+    <div class="ms-node"><div class="ms-dot"></div><div class="ms-year">2023</div></div>
+    <div class="ms-card">
+      <div class="ms-inner">
+        <div class="ms-album" onclick="openAlbum(this)">
+          <img class="ms-album-cover" src="" onerror="this.style.display='none'" alt="">
+          <div class="ms-placeholder"><span class="ph-icon">👨‍👩‍👧‍👦</span><span class="ph-txt">Thêm ảnh tại đây</span></div>
+          <div class="ms-album-overlay"></div>
+          <div class="ms-badge">06</div>
+          <div class="ms-count"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>3 ảnh</div>
+          <div class="ms-album-cta"><div class="ms-cta-pill">🖼 Xem Album</div></div>
+        </div>
+        <div class="ms-thumbs">
+          <div class="ms-thumb active" onclick="switchThumb(this,0)"><img src="" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this,1)"><img src="" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this,2)"><img src="" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb-ph">+</div>
+        </div>
+        <div class="ms-body">
+          <span class="ms-emoji">👨‍👩‍👧‍👦</span>
+          <span class="ms-tag">Gia Đình</span>
+          <h3 class="ms-title">Ra Mắt <em>Hai Gia Đình</em></h3>
+          <p class="ms-desc">Bước đi quan trọng nhất — Trung Dũng đưa Phương Thảo về ra mắt bố mẹ. Hai gia đình gặp nhau lần đầu trong bầu không khí ấm áp và đầy yêu thương.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ⑦ Cầu hôn -->
+  <div class="milestone"
+       data-title="Anh Muốn Cưới Em · 2025"
+       data-photos="LXD_6256.jpg,LXD_6256.jpg,LXD_6256.jpg,LXD_6256.jpg">
+    <div class="ms-card">
+      <div class="ms-inner">
+        <div class="ms-album" onclick="openAlbum(this)">
+          <img class="ms-album-cover" src="LXD_6256.jpg" onerror="this.style.display='none'" alt="">
+          <div class="ms-placeholder"><span class="ph-icon">💍</span><span class="ph-txt">Thêm ảnh tại đây</span></div>
+          <div class="ms-album-overlay"></div>
+          <div class="ms-badge">07</div>
+          <div class="ms-count"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>4 ảnh</div>
+          <div class="ms-album-cta"><div class="ms-cta-pill">🖼 Xem Album</div></div>
+        </div>
+        <div class="ms-thumbs">
+          <div class="ms-thumb active" onclick="switchThumb(this,0)"><img src="LXD_6256.jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this,1)"><img src="LXD_6256.jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this,2)"><img src="LXD_6256.jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this,3)"><img src="LXD_6256.jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb-ph">+</div>
+        </div>
+        <div class="ms-body">
+          <span class="ms-emoji">💍</span>
+          <span class="ms-tag">Đính Hôn</span>
+          <h3 class="ms-title">Anh Muốn <em>Cưới Em</em></h3>
+          <p class="ms-desc">Trước mặt gia đình và những người thân yêu nhất, Trung Dũng quỳ xuống với chiếc nhẫn kim cương và câu hỏi giản dị mà thiêng liêng nhất đời người. Phương Thảo đã nói "Em đồng ý!"</p>
+        </div>
+      </div>
+    </div>
+    <div class="ms-node"><div class="ms-dot"></div><div class="ms-year">2025</div></div>
+    <div class="ms-empty"></div>
+  </div>
+
+  <!-- ⑧ Hôn lễ -->
+  <div class="milestone"
+       data-title="Ngày Cưới · 22.03.2026"
+       data-photos="LXD_6256.jpg,LXD_6256.jpg,LXD_6256.jpg,LXD_6256.jpg,LXD_6256.jpg">
+    <div class="ms-empty"></div>
+    <div class="ms-node"><div class="ms-dot"></div><div class="ms-year">2026</div></div>
+    <div class="ms-card">
+      <div class="ms-inner">
+        <div class="ms-album" onclick="openAlbum(this)">
+          <img class="ms-album-cover" src="LXD_6256.jpg" onerror="this.style.display='none'" alt="">
+          <div class="ms-placeholder"><span class="ph-icon">🎊</span><span class="ph-txt">Thêm ảnh tại đây</span></div>
+          <div class="ms-album-overlay"></div>
+          <div class="ms-badge">08</div>
+          <div class="ms-count"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>5 ảnh</div>
+          <div class="ms-album-cta"><div class="ms-cta-pill">🖼 Xem Album</div></div>
+        </div>
+        <div class="ms-thumbs">
+          <div class="ms-thumb active" onclick="switchThumb(this,0)"><img src="LXD_6256.jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this,1)"><img src="LXD_6256.jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this,2)"><img src="LXD_6256.jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this,3)"><img src="LXD_6256.jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this,4)"><img src="LXD_6256.jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb-ph">+</div>
+        </div>
+        <div class="ms-body">
+          <span class="ms-emoji">🎊</span>
+          <span class="ms-tag">Hôn Lễ · 22.03.2026</span>
+          <h3 class="ms-title">Và Họ <em>Mãi Mãi Bên Nhau</em></h3>
+          <p class="ms-desc">Sau bao nhiêu ngày tháng yêu thương, hành trình đẹp nhất của hai người chính thức bắt đầu. Ngày 22 tháng 03 năm 2026 — ngày Trung Dũng và Phương Thảo nên duyên vợ chồng.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ENDING -->
+<section class="ending">
+  <div class="ending-chi">囍</div>
+  <h2 class="ending-title">Trung Dũng &amp; Phương Thảo</h2>
+  <p class="ending-sub">"Tình yêu không phải là nhìn nhau,<br>mà là cùng nhau nhìn về một hướng."</p>
+  <div class="ending-date">22 · 03 · 2026</div>
+  <div class="btn-row">
+    <a class="back-btn" href="thiep-cuoi-fixed.html">💌 &nbsp; Xem Thiệp Cưới</a>
+    <a class="back-btn back-btn-ghost" href="index.html">🏠 &nbsp; Trang Chính</a>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+  LIGHTBOX
+══════════════════════════════ -->
+<div id="lightbox" role="dialog" aria-modal="true">
+  <div class="lb-bar">
+    <span class="lb-bar-title" id="lbTitle">Album ảnh</span>
+    <div class="lb-bar-right">
+      <span class="lb-counter" id="lbCounter">1 / 1</span>
+      <button class="lb-close" onclick="closeLb()" aria-label="Đóng">✕</button>
+    </div>
+  </div>
+
+  <div class="lb-stage">
+    <button class="lb-arr hide" id="lbPrev" onclick="lbNav(-1)" aria-label="Ảnh trước">&#8592;</button>
+    <img id="lbImg" class="lb-img" src="" alt="" style="display:none">
+    <div class="lb-placeholder" id="lbPh">
+      <span class="lbph-ico">🌸</span>
+      <p>Chưa có ảnh cho khoảnh khắc này</p>
+    </div>
+    <button class="lb-arr hide" id="lbNext" onclick="lbNav(1)" aria-label="Ảnh tiếp">&#8594;</button>
+  </div>
+
+  <div class="lb-film" id="lbFilm"></div>
+</div>
+
+<script>
+/* ── GOLD WATER RIPPLE ── */
+(function(){
+  const rc = document.getElementById('rippleCanvas');
+  const rx = rc.getContext('2d');
+  function rsz(){
+    const h = rc.closest('.hero');
+    rc.width  = h.offsetWidth;
+    rc.height = h.offsetHeight;
+  }
+  addEventListener('resize', rsz); rsz();
+
+  const ripples = [];
+
+  class Ripple {
+    constructor(x, y){
+      this.x = x; this.y = y;
+      this.r = 2;           // start tiny
+      this.maxR = Math.random()*220 + 160;
+      this.speed = Math.random()*1.2 + 0.7;
+      this.alpha = 0.7;
+      this.lw = Math.random()*1.4 + 0.4;
+    }
+    update(){
+      this.r     += this.speed;
+      this.alpha  = 0.7 * (1 - this.r / this.maxR);
+    }
+    draw(){
+      rx.save();
+      rx.beginPath();
+      rx.arc(this.x, this.y, this.r, 0, Math.PI*2);
+      rx.strokeStyle = `rgba(201,169,110,${this.alpha})`;
+      rx.lineWidth   = this.lw;
+      rx.stroke();
+      rx.restore();
+    }
+    get dead(){ return this.r >= this.maxR; }
+  }
+
+  // Drop = small gold ellipse + splash lines
+  class Drop {
+    constructor(x, y){
+      this.x = x; this.y = y;
+      this.vy = 0; this.ay = 2.2;
+      this.phase = 'fall';   // fall → splash
+      this.splashT = 0;
+      this.rippleSpawned = 0;
+      // how many rings this drop spawns (2–4)
+      this.rings = Math.floor(Math.random()*3)+2;
+      this.rippleInterval = 10; // frames between rings
+    }
+    update(){
+      if(this.phase === 'fall'){
+        this.vy += this.ay;
+        this.y  += this.vy;
+        // "land" 10px below spawn
+        if(this.vy > 18){ this.phase = 'splash'; this.splashT = 0; }
+      } else {
+        this.splashT++;
+        // spawn rings staggered
+        const shouldSpawn = this.splashT % this.rippleInterval === 0;
+        if(shouldSpawn && this.rippleSpawned < this.rings){
+          ripples.push(new Ripple(this.x, this.y));
+          this.rippleSpawned++;
+        }
+      }
+    }
+    draw(){
+      if(this.phase !== 'fall') return;
+      rx.save();
+      // drop body
+      const g = rx.createRadialGradient(this.x, this.y-2, 1, this.x, this.y, 5);
+      g.addColorStop(0,  'rgba(255,235,160,0.95)');
+      g.addColorStop(0.5,'rgba(201,169,110,0.85)');
+      g.addColorStop(1,  'rgba(160,120,60,0)');
+      rx.fillStyle = g;
+      rx.beginPath();
+      rx.ellipse(this.x, this.y, 4, 7, 0, 0, Math.PI*2);
+      rx.fill();
+      // highlight
+      rx.fillStyle = 'rgba(255,245,200,0.7)';
+      rx.beginPath();
+      rx.ellipse(this.x-1, this.y-2, 1.2, 2.5, -0.3, 0, Math.PI*2);
+      rx.fill();
+      rx.restore();
+    }
+    get dead(){ return this.phase==='splash' && this.rippleSpawned >= this.rings && this.splashT > this.rings*this.rippleInterval+80; }
+  }
+
+  const drops = [];
+
+  // Auto-spawn drops at random positions on hero
+  function spawnDrop(){
+    const w = rc.width, h = rc.height;
+    const x = w*0.2 + Math.random()*w*0.6;
+    const y = h*0.25 + Math.random()*h*0.35;
+    drops.push(new Drop(x, y - 40));
+  }
+
+  // Initial burst of 3 drops
+  for(let i=0;i<3;i++) setTimeout(spawnDrop, i*500);
+  // Then periodic
+  setInterval(spawnDrop, 1800);
+
+  function rLoop(){
+    rx.clearRect(0, 0, rc.width, rc.height);
+
+    // Draw splash circles on "landing" point
+    for(let i=drops.length-1; i>=0; i--){
+      drops[i].update();
+      drops[i].draw();
+      if(drops[i].dead) drops.splice(i,1);
+    }
+    for(let i=ripples.length-1; i>=0; i--){
+      ripples[i].update();
+      ripples[i].draw();
+      if(ripples[i].dead) ripples.splice(i,1);
+    }
+    requestAnimationFrame(rLoop);
+  }
+  rLoop();
+})();
+
+/* ── PETALS ── */
+(function(){
+  const c=document.getElementById('petalCanvas'),x=c.getContext('2d');
+  const resize=()=>{c.width=innerWidth;c.height=innerHeight;};
+  addEventListener('resize',resize);resize();
+  const PC=['rgba(201,169,110,','rgba(192,32,32,','rgba(232,213,176,','rgba(255,200,200,'];
+  class P{
+    constructor(){this.r(true);}
+    r(init){
+      this.x=Math.random()*c.width;this.y=init?Math.random()*c.height:-20;
+      this.s=Math.random()*7+4;this.vx=(Math.random()-.5)*1.2;this.vy=Math.random()*.8+.4;
+      this.ro=Math.random()*Math.PI*2;this.dr=(Math.random()-.5)*.04;
+      this.col=PC[0|Math.random()*4];this.op=Math.random()*.55+.18;
+    }
+    u(){this.x+=this.vx+Math.sin(Date.now()*.001+this.y*.01)*.35;this.y+=this.vy;this.ro+=this.dr;if(this.y>c.height+20)this.r();}
+    d(){x.save();x.translate(this.x,this.y);x.rotate(this.ro);x.globalAlpha=this.op;x.fillStyle=this.col+'0.8)';x.beginPath();x.ellipse(0,0,this.s,this.s/2.2,0,0,Math.PI*2);x.fill();x.restore();}
+  }
+  const ps=Array.from({length:36},()=>new P());
+  (function loop(){x.clearRect(0,0,c.width,c.height);ps.forEach(p=>{p.u();p.d();});requestAnimationFrame(loop);})();
+})();
+
+/* ── PROGRESS ── */
+const pbar=document.getElementById('progress');
+addEventListener('scroll',()=>{pbar.style.width=(scrollY/(document.body.scrollHeight-innerHeight)*100)+'%';},{passive:true});
+
+/* ── SCROLL REVEAL ── */
+const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),60);io.unobserve(e.target);}});},{threshold:.15});
+document.querySelectorAll('.milestone').forEach(m=>io.observe(m));
+
+/* ── THUMBNAIL SWITCH IN CARD ── */
+function switchThumb(thumb,idx){
+  const inner=thumb.closest('.ms-inner');
+  const cover=inner.querySelector('.ms-album-cover');
+  inner.querySelectorAll('.ms-thumb').forEach(t=>t.classList.remove('active'));
+  thumb.classList.add('active');
+  const src=thumb.querySelector('img')?.src||'';
+  if(src){cover.src=src;cover.style.display='block';}
+}
+
+/* ── LIGHTBOX STATE ── */
+let lbPhotos=[],lbIdx=0,touchX=0;
+
+function openAlbum(el){
+  const ms=el.closest('.milestone');
+  lbPhotos=(ms.dataset.photos||'').split(',').map(s=>s.trim()).filter(Boolean);
+  document.getElementById('lbTitle').textContent=ms.dataset.title||'Album ảnh';
+  buildFilm();showPhoto(0);
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeLb(){
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow='';
+}
+function buildFilm(){
+  const film=document.getElementById('lbFilm');
+  film.innerHTML='';
+  if(!lbPhotos.length){film.innerHTML='<div style="color:rgba(255,255,255,.3);font-size:12px;padding:8px">Chưa có ảnh</div>';return;}
+  lbPhotos.forEach((src,i)=>{
+    const d=document.createElement('div');d.className='lb-ft'+(i===0?' active':'');
+    d.onclick=()=>showPhoto(i);
+    const img=document.createElement('img');img.src=src;img.alt='';
+    img.onerror=()=>{d.style.opacity='.25';};
+    d.appendChild(img);film.appendChild(d);
+  });
+}
+function showPhoto(idx){
+  if(!lbPhotos.length){
+    document.getElementById('lbImg').style.display='none';
+    document.getElementById('lbPh').style.display='flex';
+    document.getElementById('lbCounter').textContent='0 / 0';
+    document.getElementById('lbPrev').classList.add('hide');
+    document.getElementById('lbNext').classList.add('hide');
+    return;
+  }
+  lbIdx=Math.max(0,Math.min(idx,lbPhotos.length-1));
+  const src=lbPhotos[lbIdx];
+  const img=document.getElementById('lbImg');
+  const ph=document.getElementById('lbPh');
+  if(src){
+    img.src=src;
+    img.style.display='block';
+    ph.style.display='none';
+    // retrigger animation
+    img.style.animation='none';
+    requestAnimationFrame(()=>{img.style.animation='lbIn .28s ease';});
+  } else {
+    img.style.display='none';
+    ph.style.display='flex';
+  }
+  document.getElementById('lbCounter').textContent=(lbIdx+1)+' / '+lbPhotos.length;
+  document.getElementById('lbPrev').classList.toggle('hide',lbIdx===0);
+  document.getElementById('lbNext').classList.toggle('hide',lbIdx===lbPhotos.length-1);
+  // filmstrip
+  document.querySelectorAll('#lbFilm .lb-ft').forEach((t,i)=>t.classList.toggle('active',i===lbIdx));
+  const act=document.querySelector('#lbFilm .lb-ft.active');
+  if(act)act.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+function lbNav(d){showPhoto(lbIdx+d);}
+
+// Keyboard
+document.addEventListener('keydown',e=>{
+  if(!document.getElementById('lightbox').classList.contains('open'))return;
+  if(e.key==='ArrowLeft')lbNav(-1);
+  else if(e.key==='ArrowRight')lbNav(1);
+  else if(e.key==='Escape')closeLb();
+});
+
+// Click backdrop
+document.getElementById('lightbox').addEventListener('click',e=>{
+  if(e.target.id==='lightbox')closeLb();
+});
+
+// Touch swipe
+const lbEl=document.getElementById('lightbox');
+lbEl.addEventListener('touchstart',e=>{touchX=e.touches[0].clientX;},{passive:true});
+lbEl.addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-touchX;
+  if(Math.abs(dx)>50)lbNav(dx<0?1:-1);
+},{passive:true});
+</script>
+</body>
+</html>
