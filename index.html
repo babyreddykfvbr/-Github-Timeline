@@ -108,13 +108,38 @@ body{background:var(--cream);color:var(--ink);font-family:var(--fn);overflow-x:h
 .ms-cta-pill{display:flex;align-items:center;gap:8px;background:rgba(201,169,110,.96);color:var(--red2);font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding:8px 20px;border-radius:30px;box-shadow:0 4px 20px rgba(0,0,0,.35);}
 
 /* ── THUMBNAIL STRIP ── */
-.ms-thumbs{display:flex;gap:4px;padding:6px 6px 0;overflow-x:auto;scrollbar-width:none;background:var(--white);}
+.ms-thumbs{
+  display:flex;
+  flex-wrap:nowrap;                  /* ← không cho xuống dòng */
+  gap:4px;
+  padding:6px 6px 0;
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;  /* ← scroll mượt iOS */
+  scrollbar-width:none;
+  background:var(--white);
+}
 .ms-thumbs::-webkit-scrollbar{display:none;}
-.ms-thumb{flex-shrink:0;width:52px;height:40px;border-radius:3px;overflow:hidden;cursor:pointer;border:2px solid transparent;transition:border-color .2s,transform .2s;background:var(--goldpale);}
+.ms-thumb{
+  flex:0 0 52px;                     /* ← không co, không giãn, luôn 52px */
+  height:40px;
+  border-radius:3px;
+  overflow:hidden;
+  cursor:pointer;
+  border:2px solid transparent;
+  transition:border-color .2s,transform .2s;
+  background:var(--goldpale);
+}
 .ms-thumb.active{border-color:var(--gold);}
 .ms-thumb:hover{transform:scale(1.06);}
 .ms-thumb img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;}
-.ms-thumb-ph{flex-shrink:0;width:52px;height:40px;border-radius:3px;border:1.5px dashed var(--goldlt);display:flex;align-items:center;justify-content:center;font-size:17px;color:var(--goldlt);background:var(--goldpale);}
+.ms-thumb-ph{
+  flex:0 0 52px;                     /* ← cũng cố định */
+  height:40px;
+  border-radius:3px;
+  border:1.5px dashed var(--goldlt);
+  display:flex;align-items:center;justify-content:center;
+  font-size:17px;color:var(--goldlt);background:var(--goldpale);
+}
 
 /* ── CARD BODY ── */
 .ms-body{padding:14px 18px 18px;position:relative;z-index:1;text-align:left;}
@@ -227,8 +252,8 @@ body{background:var(--cream);color:var(--ink);font-family:var(--fn);overflow-x:h
 .ending-title{font-family:var(--fs);font-size:clamp(28px,6vw,54px);font-weight:700;color:var(--white);position:relative;z-index:1;margin-bottom:12px;text-shadow:0 4px 20px rgba(0,0,0,.3);}
 .ending-sub{font-family:var(--fh);font-size:clamp(16px,2.5vw,22px);font-style:italic;font-weight:300;color:var(--goldlt);position:relative;z-index:1;margin-bottom:32px;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.7;}
 .ending-date{font-size:14px;font-weight:600;letter-spacing:.35em;color:var(--gold);position:relative;z-index:1;margin-bottom:40px;}
-.btn-row{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;position:relative;z-index:1;}
-.back-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:14px 36px;min-width:200px;border:1.5px solid var(--gold);background:transparent;color:var(--white);font-size:13px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;text-decoration:none;border-radius:2px;transition:all .25s;}
+.btn-row{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;position:relative;z-index:1;max-width:520px;margin-left:auto;margin-right:auto;}
+.back-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:14px 20px;flex:1 1 200px;border:1.5px solid var(--gold);background:transparent;color:var(--white);font-size:13px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;text-decoration:none;border-radius:2px;transition:all .25s;white-space:nowrap;}
 .back-btn:hover{background:var(--gold);color:var(--red2);}
 .back-btn-ghost{background:transparent;border-color:var(--gold);color:var(--white);}
 .back-btn-ghost:hover{background:var(--gold);border-color:var(--gold);color:var(--red2);}
@@ -282,7 +307,7 @@ body{background:var(--cream);color:var(--ink);font-family:var(--fn);overflow-x:h
   <p class="hero-eyebrow">✦ &nbsp; Câu Chuyện Tình Yêu &nbsp; ✦</p>
   <div class="hero-chi">囍</div>
   <h1 class="hero-names">Trung Dũng <span class="hero-heart">♥</span> Phương Thảo</h1>
-  <p class="hero-sub">Một hành trình bắt đầu từ những điều nhỏ bé<br>và kết thúc bằng mãi mãi</p>
+  <p class="hero-sub">Trăm triệu hạt mưa không hạt nào rơi nhầm chỗ<br>Chúng mình nên duyên chẳng phải điều ngẫu nhiên</p>
   <div class="hero-date">22 · 03 · 2026</div>
   <div class="hero-scroll"><span>Cuộn xuống</span><div class="scroll-line"></div></div>
 </section>
@@ -290,7 +315,7 @@ body{background:var(--cream);color:var(--ink);font-family:var(--fn);overflow-x:h
 <!-- HEADER -->
 <div class="sec-header">
   <span class="sec-eyebrow">✦ &nbsp; Từng Khoảnh Khắc &nbsp; ✦</span>
-  <h2 class="sec-title">Hành Trình <em>Của Chúng Tôi</em></h2>
+  <h2 class="sec-title">Hành Trình <em>Đôi Mình</em></h2>
   <div class="orn"><div class="orn-dia"></div></div>
 </div>
 
@@ -305,63 +330,78 @@ body{background:var(--cream);color:var(--ink);font-family:var(--fn);overflow-x:h
 
   <!-- ① Lần đầu gặp nhau -->
   <div class="milestone"
-       data-title="Lần Đầu Gặp Nhau · 2021"
+       data-title="Lần Đầu Gặp Nhau · 2023"
        data-photos="1 (1).jpg,1 (2).jpg,1 (3).jpg">
     <div class="ms-card">
       <div class="ms-inner">
         <div class="ms-album" onclick="openAlbum(this)">
-          <img class="ms-album-cover" src="1 (1).jpg" onerror="this.style.display='none'" alt="">
-          <div class="ms-placeholder"><span class="ph-icon">🌸</span></div>
+          <img class="ms-album-cover" src="1 (2).jpg" onerror="this.style.display='none'" alt="">
+          <div class="ms-placeholder"></div>
           <div class="ms-album-overlay"></div>
           <div class="ms-badge">01</div>
           <div class="ms-count"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>3 ảnh</div>
           <div class="ms-album-cta"><div class="ms-cta-pill">🖼 Xem Album</div></div>
         </div>
         <div class="ms-thumbs">
-          <div class="ms-thumb active" onclick="switchThumb(this,0)"><img src="1 (1).jpg" onerror="this.style.opacity='0'"></div>
-          <div class="ms-thumb" onclick="switchThumb(this,1)"><img src="1 (2).jpg" onerror="this.style.opacity='0'"></div>
-          <div class="ms-thumb" onclick="switchThumb(this,2)"><img src="1 (3).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb active" onclick="switchThumb(this)"><img src="1 (1).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="1 (2).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="1 (3).jpg" onerror="this.style.opacity='0'"></div>
           <div class="ms-thumb-ph">+</div>
         </div>
         <div class="ms-body">
           <span class="ms-emoji">🌸</span>
           <span class="ms-tag">Khởi Đầu</span>
           <h3 class="ms-title">Lần Đầu <em>Gặp Nhau</em></h3>
-          <p class="ms-desc">Hai người xa lạ tình cờ cùng tham gia một buổi tụ họp của nhóm bạn chung. Chẳng ai ngờ cuộc gặp gỡ giản đơn ấy lại là khởi đầu cho tất cả những điều sau này.</p>
+          <p class="ms-desc">Chúng ta từng lướt qua rất nhiều lần nhưng chẳng hề để ý đối phương. Em là cô bé nhát trai gặp anh là chàng trai sát gái. Thế nào tiếng sét ái tình, ông trời se duyên chúng mình.</p>
         </div>
       </div>
     </div>
-    <div class="ms-node"><div class="ms-dot"></div><div class="ms-year">2021</div></div>
+    <div class="ms-node"><div class="ms-dot"></div><div class="ms-year">2023</div></div>
     <div class="ms-empty"></div>
   </div>
 
   <!-- ② Tin nhắn đêm khuya -->
   <div class="milestone"
-       data-title="Những Tin Nhắn Đêm Khuya · 2021"
-       data-photos=",,">
+       data-title="Chinh Phục Chiếc Bụng Đói · 2023"
+       data-photos="2 (1).jpg,2 (2).jpg,2 (3).jpg,2 (4).jpg,2 (5).jpg,2 (6).jpg,2 (7).jpg,2 (8).jpg,2 (9).jpg,2 (10).jpg,2 (11).jpg,2 (12).jpg,2 (13).jpg,2 (14).jpg,2 (15).jpg,2 (16).jpg,2 (17).jpg">
     <div class="ms-empty"></div>
-    <div class="ms-node"><div class="ms-dot"></div><div class="ms-year">2021</div></div>
+    <div class="ms-node"><div class="ms-dot"></div><div class="ms-year">2023</div></div>
     <div class="ms-card">
       <div class="ms-inner">
         <div class="ms-album" onclick="openAlbum(this)">
-          <img class="ms-album-cover" src="" onerror="this.style.display='none'" alt="">
-          <div class="ms-placeholder"><span class="ph-icon">💬</span><span class="ph-txt">Thêm ảnh tại đây</span></div>
+          <img class="ms-album-cover" src="2 (17).jpg" onerror="this.style.display='none'" alt="">
+          <div class="ms-placeholder"></div>
           <div class="ms-album-overlay"></div>
           <div class="ms-badge">02</div>
-          <div class="ms-count"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>3 ảnh</div>
+          <div class="ms-count"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>17 ảnh</div>
           <div class="ms-album-cta"><div class="ms-cta-pill">🖼 Xem Album</div></div>
         </div>
         <div class="ms-thumbs">
-          <div class="ms-thumb active" onclick="switchThumb(this,0)"><img src="" onerror="this.style.opacity='0'"></div>
-          <div class="ms-thumb" onclick="switchThumb(this,1)"><img src="" onerror="this.style.opacity='0'"></div>
-          <div class="ms-thumb" onclick="switchThumb(this,2)"><img src="" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb active" onclick="switchThumb(this)"><img src="" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="2 (1).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="2 (2).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb active" onclick="switchThumb(this)"><img src="2 (3).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="2 (4).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="2 (5).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb active" onclick="switchThumb(this)"><img src="2 (6).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="2 (7).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="2 (8).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb active" onclick="switchThumb(this)"><img src="2 (9).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="2 (10).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="2 (11).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="2 (12).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="2 (13).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="2 (14).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="2 (15).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="2 (16).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="2 (17).jpg" onerror="this.style.opacity='0'"></div>
           <div class="ms-thumb-ph">+</div>
         </div>
         <div class="ms-body">
           <span class="ms-emoji">💬</span>
           <span class="ms-tag">Tình Bạn</span>
-          <h3 class="ms-title">Những Tin Nhắn <em>Đêm Khuya</em></h3>
-          <p class="ms-desc">Từ những tin nhắn hỏi thăm ngắn ngủi, hai người dần trở nên thân thiết hơn. Những cuộc trò chuyện kéo dài đến tận nửa đêm về đủ mọi chuyện trên đời.</p>
+          <h3 class="ms-title">Chinh Phục <em>Chiếc Bụng Đói</em></h3>
+          <p class="ms-desc">Thương cô em hằng ngày phải ăn cơm kí túc, anh nguyện lòng chuyện bếp núc, nuôi em thành con nhợn béo nhung nhúc.</p>
         </div>
       </div>
     </div>
@@ -369,63 +409,71 @@ body{background:var(--cream);color:var(--ink);font-family:var(--fn);overflow-x:h
 
   <!-- ③ Buổi hẹn đầu tiên -->
   <div class="milestone"
-       data-title="Buổi Hẹn Đầu Tiên · 2022"
-       data-photos=",,">
+       data-title="Tích Cực Chăm Hoa · 2024"
+       data-photos="3 (1).jpg,3 (2).jpg,3 (3).jpg,3 (4).jpg,3 (5).jpg,3 (6).jpg,3 (7).jpg,3 (8).jpg,3 (9).jpg">
     <div class="ms-card">
       <div class="ms-inner">
         <div class="ms-album" onclick="openAlbum(this)">
-          <img class="ms-album-cover" src="" onerror="this.style.display='none'" alt="">
-          <div class="ms-placeholder"><span class="ph-icon">☕</span><span class="ph-txt">Thêm ảnh tại đây</span></div>
+          <img class="ms-album-cover" src="3 (8).jpg" onerror="this.style.display='none'" alt="">
+          <div class="ms-placeholder"></div>
           <div class="ms-album-overlay"></div>
           <div class="ms-badge">03</div>
-          <div class="ms-count"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>3 ảnh</div>
+          <div class="ms-count"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>9 ảnh</div>
           <div class="ms-album-cta"><div class="ms-cta-pill">🖼 Xem Album</div></div>
         </div>
         <div class="ms-thumbs">
-          <div class="ms-thumb active" onclick="switchThumb(this,0)"><img src="" onerror="this.style.opacity='0'"></div>
-          <div class="ms-thumb" onclick="switchThumb(this,1)"><img src="" onerror="this.style.opacity='0'"></div>
-          <div class="ms-thumb" onclick="switchThumb(this,2)"><img src="" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb active" onclick="switchThumb(this)"><img src="3 (1).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="3 (2).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="3 (3).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="3 (4).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="3 (5).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="3 (6).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="3 (7).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="3 (8).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="3 (9).jpg" onerror="this.style.opacity='0'"></div>
           <div class="ms-thumb-ph">+</div>
         </div>
         <div class="ms-body">
-          <span class="ms-emoji">☕</span>
+          <span class="ms-emoji">🌷</span>
           <span class="ms-tag">Hẹn Hò</span>
-          <h3 class="ms-title">Buổi Hẹn Đầu <em>Tiên</em></h3>
-          <p class="ms-desc">Một buổi chiều uống cà phê tưởng chừng bình thường nhưng lại khiến cả hai đều không muốn về. Lần đầu tiên Trung Dũng nhận ra trái tim mình đang đập khác đi.</p>
+          <h3 class="ms-title">Tích Cực <em>Chăm Hoa</em></h3>
+          <p class="ms-desc">Trên tay anh cầm một đóa hoa, mong em gật đầu đồng ý nha. Oh baby girl em là vàng bạc châu báu nên anh phải giấu làm của riêng.</p>
         </div>
       </div>
     </div>
-    <div class="ms-node"><div class="ms-dot"></div><div class="ms-year">2022</div></div>
+    <div class="ms-node"><div class="ms-dot"></div><div class="ms-year">2024</div></div>
     <div class="ms-empty"></div>
   </div>
 
   <!-- ④ Chính thức yêu nhau -->
   <div class="milestone"
-       data-title="Chúng Mình Yêu Nhau · 2022"
-       data-photos=",,">
+       data-title="Chúng Mình Yêu Nhau · 2024"
+       data-photos="4 (1).jpg,4 (2).jpg,4 (3).jpg,4 (4).jpg,4 (5).jpg">
     <div class="ms-empty"></div>
-    <div class="ms-node"><div class="ms-dot"></div><div class="ms-year">2022</div></div>
+    <div class="ms-node"><div class="ms-dot"></div><div class="ms-year">2024</div></div>
     <div class="ms-card">
       <div class="ms-inner">
         <div class="ms-album" onclick="openAlbum(this)">
-          <img class="ms-album-cover" src="" onerror="this.style.display='none'" alt="">
-          <div class="ms-placeholder"><span class="ph-icon">💑</span><span class="ph-txt">Thêm ảnh tại đây</span></div>
+          <img class="ms-album-cover" src="4 (2).jpg" onerror="this.style.display='none'" alt="">
+          <div class="ms-placeholder"></div>
           <div class="ms-album-overlay"></div>
           <div class="ms-badge">04</div>
-          <div class="ms-count"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>3 ảnh</div>
+          <div class="ms-count"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>5 ảnh</div>
           <div class="ms-album-cta"><div class="ms-cta-pill">🖼 Xem Album</div></div>
         </div>
         <div class="ms-thumbs">
-          <div class="ms-thumb active" onclick="switchThumb(this,0)"><img src="" onerror="this.style.opacity='0'"></div>
-          <div class="ms-thumb" onclick="switchThumb(this,1)"><img src="" onerror="this.style.opacity='0'"></div>
-          <div class="ms-thumb" onclick="switchThumb(this,2)"><img src="" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb active" onclick="switchThumb(this)"><img src="4 (1).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="4 (2).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="4 (3).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="4 (4).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="4 (5).jpg" onerror="this.style.opacity='0'"></div>
           <div class="ms-thumb-ph">+</div>
         </div>
         <div class="ms-body">
           <span class="ms-emoji">💑</span>
           <span class="ms-tag">Chính Thức</span>
           <h3 class="ms-title">Chúng Mình <em>Yêu Nhau</em></h3>
-          <p class="ms-desc">Dưới bầu trời đêm đầy sao, Trung Dũng đã nói lên những gì cất giữ trong lòng bấy lâu. Phương Thảo gật đầu với nụ cười rạng rỡ nhất từ trước đến giờ.</p>
+          <p class="ms-desc">Anh tỏ tình vào một ngày đầy nắng, em nhận lời vào một ngày vắng sao. Mặt trăng đêm ấy thật đẹp khiến anh chỉ muốn trăng mật cùng em. </p>
         </div>
       </div>
     </div>
@@ -433,98 +481,129 @@ body{background:var(--cream);color:var(--ink);font-family:var(--fn);overflow-x:h
 
   <!-- ⑤ Một năm bên nhau -->
   <div class="milestone"
-       data-title="Một Năm Bên Nhau · 2023"
-       data-photos=",,">
+       data-title="Chúng Mình Bên Nhau · 2025"
+       data-photos="5 (1).jpg,5 (2).jpg,5 (3).jpg,5 (4).jpg,5 (5).jpg">
     <div class="ms-card">
       <div class="ms-inner">
         <div class="ms-album" onclick="openAlbum(this)">
-          <img class="ms-album-cover" src="" onerror="this.style.display='none'" alt="">
-          <div class="ms-placeholder"><span class="ph-icon">🎂</span><span class="ph-txt">Thêm ảnh tại đây</span></div>
+          <img class="ms-album-cover" src="5 (1).jpg" onerror="this.style.display='none'" alt="">
+          <div class="ms-placeholder"></div>
           <div class="ms-album-overlay"></div>
           <div class="ms-badge">05</div>
-          <div class="ms-count"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>3 ảnh</div>
+          <div class="ms-count"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>5 ảnh</div>
           <div class="ms-album-cta"><div class="ms-cta-pill">🖼 Xem Album</div></div>
         </div>
         <div class="ms-thumbs">
-          <div class="ms-thumb active" onclick="switchThumb(this,0)"><img src="" onerror="this.style.opacity='0'"></div>
-          <div class="ms-thumb" onclick="switchThumb(this,1)"><img src="" onerror="this.style.opacity='0'"></div>
-          <div class="ms-thumb" onclick="switchThumb(this,2)"><img src="" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb active" onclick="switchThumb(this)"><img src="5 (1).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="5 (2).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="5 (3).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="5 (4).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="5 (5).jpg" onerror="this.style.opacity='0'"></div>
           <div class="ms-thumb-ph">+</div>
         </div>
         <div class="ms-body">
           <span class="ms-emoji">🎂</span>
           <span class="ms-tag">Kỷ Niệm</span>
-          <h3 class="ms-title">Một Năm <em>Bên Nhau</em></h3>
-          <p class="ms-desc">Kỷ niệm một năm yêu nhau, họ cùng nhau trải qua chuyến du lịch đầu tiên. Những khoảnh khắc ấy trở thành ký ức đẹp nhất mà cả hai đều trân trọng.</p>
-        </div>
-      </div>
-    </div>
-    <div class="ms-node"><div class="ms-dot"></div><div class="ms-year">2023</div></div>
-    <div class="ms-empty"></div>
-  </div>
-
-  <!-- ⑥ Ra mắt gia đình -->
-  <div class="milestone"
-       data-title="Ra Mắt Hai Gia Đình · 2023"
-       data-photos=",,">
-    <div class="ms-empty"></div>
-    <div class="ms-node"><div class="ms-dot"></div><div class="ms-year">2023</div></div>
-    <div class="ms-card">
-      <div class="ms-inner">
-        <div class="ms-album" onclick="openAlbum(this)">
-          <img class="ms-album-cover" src="" onerror="this.style.display='none'" alt="">
-          <div class="ms-placeholder"><span class="ph-icon">👨‍👩‍👧‍👦</span><span class="ph-txt">Thêm ảnh tại đây</span></div>
-          <div class="ms-album-overlay"></div>
-          <div class="ms-badge">06</div>
-          <div class="ms-count"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>3 ảnh</div>
-          <div class="ms-album-cta"><div class="ms-cta-pill">🖼 Xem Album</div></div>
-        </div>
-        <div class="ms-thumbs">
-          <div class="ms-thumb active" onclick="switchThumb(this,0)"><img src="" onerror="this.style.opacity='0'"></div>
-          <div class="ms-thumb" onclick="switchThumb(this,1)"><img src="" onerror="this.style.opacity='0'"></div>
-          <div class="ms-thumb" onclick="switchThumb(this,2)"><img src="" onerror="this.style.opacity='0'"></div>
-          <div class="ms-thumb-ph">+</div>
-        </div>
-        <div class="ms-body">
-          <span class="ms-emoji">👨‍👩‍👧‍👦</span>
-          <span class="ms-tag">Gia Đình</span>
-          <h3 class="ms-title">Ra Mắt <em>Hai Gia Đình</em></h3>
-          <p class="ms-desc">Bước đi quan trọng nhất — Trung Dũng đưa Phương Thảo về ra mắt bố mẹ. Hai gia đình gặp nhau lần đầu trong bầu không khí ấm áp và đầy yêu thương.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ⑦ Cầu hôn -->
-  <div class="milestone"
-       data-title="Anh Muốn Cưới Em · 2025"
-       data-photos="LXD_6256.jpg,LXD_6256.jpg,LXD_6256.jpg,LXD_6256.jpg">
-    <div class="ms-card">
-      <div class="ms-inner">
-        <div class="ms-album" onclick="openAlbum(this)">
-          <img class="ms-album-cover" src="LXD_6256.jpg" onerror="this.style.display='none'" alt="">
-          <div class="ms-placeholder"><span class="ph-icon">💍</span><span class="ph-txt">Thêm ảnh tại đây</span></div>
-          <div class="ms-album-overlay"></div>
-          <div class="ms-badge">07</div>
-          <div class="ms-count"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>4 ảnh</div>
-          <div class="ms-album-cta"><div class="ms-cta-pill">🖼 Xem Album</div></div>
-        </div>
-        <div class="ms-thumbs">
-          <div class="ms-thumb active" onclick="switchThumb(this,0)"><img src="LXD_6256.jpg" onerror="this.style.opacity='0'"></div>
-          <div class="ms-thumb" onclick="switchThumb(this,1)"><img src="LXD_6256.jpg" onerror="this.style.opacity='0'"></div>
-          <div class="ms-thumb" onclick="switchThumb(this,2)"><img src="LXD_6256.jpg" onerror="this.style.opacity='0'"></div>
-          <div class="ms-thumb" onclick="switchThumb(this,3)"><img src="LXD_6256.jpg" onerror="this.style.opacity='0'"></div>
-          <div class="ms-thumb-ph">+</div>
-        </div>
-        <div class="ms-body">
-          <span class="ms-emoji">💍</span>
-          <span class="ms-tag">Đính Hôn</span>
-          <h3 class="ms-title">Anh Muốn <em>Cưới Em</em></h3>
-          <p class="ms-desc">Trước mặt gia đình và những người thân yêu nhất, Trung Dũng quỳ xuống với chiếc nhẫn kim cương và câu hỏi giản dị mà thiêng liêng nhất đời người. Phương Thảo đã nói "Em đồng ý!"</p>
+          <h3 class="ms-title">Chúng Mình<em> Bên Nhau</em></h3>
+          <p class="ms-desc">Ba năm bên nhau, vẫn còn trẻ con nhưng chọn làm người lớn. Cảm ơn hai bạn trẻ đã cùng tạo ra những kỉ niệm đẹp và đáng trân trọng.</p>
         </div>
       </div>
     </div>
     <div class="ms-node"><div class="ms-dot"></div><div class="ms-year">2025</div></div>
+    <div class="ms-empty"></div>
+  </div>
+
+  <!-- ⑥ Cầu Hôn -->
+  <div class="milestone"
+       data-title="Cầu Hôn · 2026"
+       data-photos="6 (1).jpg,6 (2).jpg,6 (3).jpg,6 (4).jpg,6 (5).jpg,6 (6).jpg,6 (7).jpg,6 (8).jpg,6 (9).jpg,6 (10).jpg,6 (11).jpg,6 (12).jpg,6 (13).jpg,6 (14).jpg,6 (15).jpg,6 (16).jpg,6 (17).jpg,6 (18).jpg,6 (19).jpg,6 (20).jpg,6 (21).jpg,6 (22).jpg,6 (23).jpg,6 (24).jpg,6 (25).jpg,6 (26).jpg,6 (27).jpg">
+    <div class="ms-empty"></div>
+    <div class="ms-node"><div class="ms-dot"></div><div class="ms-year">2026</div></div>
+    <div class="ms-card">
+      <div class="ms-inner">
+        <div class="ms-album" onclick="openAlbum(this)">
+          <img class="ms-album-cover" src="6 (5).jpg" onerror="this.style.display='none'" alt="">
+          <div class="ms-placeholder"></div>
+          <div class="ms-album-overlay"></div>
+          <div class="ms-badge">06</div>
+          <div class="ms-count"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>27 ảnh</div>
+          <div class="ms-album-cta"><div class="ms-cta-pill">🖼 Xem Album</div></div>
+        </div>
+        <div class="ms-thumbs">
+          <div class="ms-thumb active" onclick="switchThumb(this)"><img src="6 (1).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="6 (2).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="6 (3).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="6 (4).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="6 (5).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="6 (6).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="6 (7).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="6 (8).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="6 (9).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="6 (10).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="6 (11).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="6 (12).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="6 (13).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="6 (14).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="6 (15).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="6 (16).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="6 (17).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="6 (18).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="6 (19).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="6 (20).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="6 (21).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="6 (22).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="6 (23).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="6 (24).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="6 (25).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="6 (26).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="6 (27).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb-ph">+</div>
+        </div>
+        <div class="ms-body">
+          <span class="ms-emoji">💍</span>
+          <span class="ms-tag">Cầu Hôn</span>
+          <h3 class="ms-title">Anh Muốn <em>Cưới Em</em></h3>
+          <p class="ms-desc">Ước muốn hai ta chung một nhà, anh đem nhẫn cưới cầu người qua. Em gật nhẹ đầu đồng ý gả. Từ giờ ta đã là người một nhà.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ⑦ Đính hôn -->
+  <div class="milestone"
+       data-title="Ra Mắt Hai Gia Đình · 2026"
+       data-photos="7 (1).jpg,7 (2).jpg,7 (3).jpg,7 (4).jpg,7 (5).jpg,7 (6).jpg,7 (7).jpg,7 (8).jpg,7 (9).jpg">
+    <div class="ms-card">
+      <div class="ms-inner">
+        <div class="ms-album" onclick="openAlbum(this)">
+          <img class="ms-album-cover" src="7 (4).jpg" onerror="this.style.display='none'" alt="">
+          <div class="ms-placeholder"></div>
+          <div class="ms-album-overlay"></div>
+          <div class="ms-badge">07</div>
+          <div class="ms-count"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>9 ảnh</div>
+          <div class="ms-album-cta"><div class="ms-cta-pill">🖼 Xem Album</div></div>
+        </div>
+        <div class="ms-thumbs">
+          <div class="ms-thumb active" onclick="switchThumb(this)"><img src="7 (1).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="7 (2).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="7 (3).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="7 (4).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="7 (5).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="7 (6).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="7 (7).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="7 (8).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="7 (9).jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb-ph">+</div>
+        </div>
+        <div class="ms-body">
+          <span class="ms-emoji">📸</span>
+          <span class="ms-tag">Đính Hôn</span>
+          <h3 class="ms-title">Ra Mắt <em>Hai Gia Đình</em></h3>
+          <p class="ms-desc">Anh đem sính lễ qua thưa chuyện, em đẹp xinh trông cũng rất tình. Gia đình mình gặp nhau trong không khí ấm ấp và tràn đầy tình yêu thương.</p>
+        </div>
+      </div>
+    </div>
+    <div class="ms-node"><div class="ms-dot"></div><div class="ms-year">2026</div></div>
     <div class="ms-empty"></div>
   </div>
 
@@ -538,18 +617,18 @@ body{background:var(--cream);color:var(--ink);font-family:var(--fn);overflow-x:h
       <div class="ms-inner">
         <div class="ms-album" onclick="openAlbum(this)">
           <img class="ms-album-cover" src="LXD_6256.jpg" onerror="this.style.display='none'" alt="">
-          <div class="ms-placeholder"><span class="ph-icon">🎊</span><span class="ph-txt">Thêm ảnh tại đây</span></div>
+          <div class="ms-placeholder"><span class="ph-txt">Thêm ảnh tại đây</span></div>
           <div class="ms-album-overlay"></div>
           <div class="ms-badge">08</div>
           <div class="ms-count"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>5 ảnh</div>
           <div class="ms-album-cta"><div class="ms-cta-pill">🖼 Xem Album</div></div>
         </div>
         <div class="ms-thumbs">
-          <div class="ms-thumb active" onclick="switchThumb(this,0)"><img src="LXD_6256.jpg" onerror="this.style.opacity='0'"></div>
-          <div class="ms-thumb" onclick="switchThumb(this,1)"><img src="LXD_6256.jpg" onerror="this.style.opacity='0'"></div>
-          <div class="ms-thumb" onclick="switchThumb(this,2)"><img src="LXD_6256.jpg" onerror="this.style.opacity='0'"></div>
-          <div class="ms-thumb" onclick="switchThumb(this,3)"><img src="LXD_6256.jpg" onerror="this.style.opacity='0'"></div>
-          <div class="ms-thumb" onclick="switchThumb(this,4)"><img src="LXD_6256.jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb active" onclick="switchThumb(this)"><img src="LXD_6256.jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="LXD_6256.jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="LXD_6256.jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="LXD_6256.jpg" onerror="this.style.opacity='0'"></div>
+          <div class="ms-thumb" onclick="switchThumb(this)"><img src="LXD_6256.jpg" onerror="this.style.opacity='0'"></div>
           <div class="ms-thumb-ph">+</div>
         </div>
         <div class="ms-body">
@@ -568,11 +647,11 @@ body{background:var(--cream);color:var(--ink);font-family:var(--fn);overflow-x:h
 <section class="ending">
   <div class="ending-chi">囍</div>
   <h2 class="ending-title">Trung Dũng &amp; Phương Thảo</h2>
-  <p class="ending-sub">"Tình yêu không phải là nhìn nhau,<br>mà là cùng nhau nhìn về một hướng."</p>
+  <p class="ending-sub">"Chúng mình có nhau là định mệnh"</p>
   <div class="ending-date">22 · 03 · 2026</div>
   <div class="btn-row">
-    <a class="back-btn" href="https://babyreddykfvbr.github.io/wedding_card/">💌 &nbsp; Xem Thiệp Cưới</a>
-    <a class="back-btn back-btn-ghost" href="https://dungiuthao.github.io/wedding_invitation/">🏠 &nbsp; Trang Chính</a>
+    <a class="back-btn" href="https://dungiuthao.github.io/wedding_invitation_view/">💌 &nbsp; Xem Thiệp Cưới</a>
+    <a class="back-btn back-btn-ghost" href="https://dungiuthao.github.io/wedding_invitation/">🏠 &nbsp; Trang Chủ</a>
   </div>
 </section>
 
@@ -746,6 +825,14 @@ body{background:var(--cream);color:var(--ink);font-family:var(--fn);overflow-x:h
   const ps=Array.from({length:36},()=>new P());
   (function loop(){x.clearRect(0,0,c.width,c.height);ps.forEach(p=>{p.u();p.d();});requestAnimationFrame(loop);})();
 })();
+  /* ═══ MUSIC BTN ═══ */
+#mbtn{position:fixed;bottom:1.5rem;right:1.5rem;z-index:100;width:50px;height:50px;border-radius:50%;border:2px solid rgba(75,179,232,.5);background:var(--white);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.25rem;color:var(--sky);transition:all .3s}
+#mbtn:hover{transform:scale(1.1);border-color:var(--sky)}
+#mbtn.on{background:var(--sky);color:var(--white)}
+#mbtn.on::before{content:'';position:absolute;inset:-7px;border-radius:50%;border:1.5px solid rgba(75,179,232,.3);animation:ring 2s ease-out infinite}
+@keyframes ring{0%{transform:scale(1);opacity:.6}100%{transform:scale(1.45);opacity:0}}
+#mtip{position:fixed;bottom:1.4rem;right:4.8rem;z-index:100;background:var(--textd);border:1px solid rgba(75,179,232,.3);padding:.45rem .9rem;border-radius:6px;font-family:'Lora',serif;font-size:.82rem;font-style:italic;color:rgba(255,255,255,.9);white-space:nowrap;opacity:0;transform:translateX(8px);transition:opacity .4s,transform .4s;pointer-events:none}
+#mtip.show{opacity:1;transform:translateX(0)}
 
 /* ── PROGRESS ── */
 const pbar=document.getElementById('progress');
@@ -755,14 +842,24 @@ addEventListener('scroll',()=>{pbar.style.width=(scrollY/(document.body.scrollHe
 const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),60);io.unobserve(e.target);}});},{threshold:.15});
 document.querySelectorAll('.milestone').forEach(m=>io.observe(m));
 
-/* ── THUMBNAIL SWITCH IN CARD ── */
-function switchThumb(thumb,idx){
-  const inner=thumb.closest('.ms-inner');
-  const cover=inner.querySelector('.ms-album-cover');
-  inner.querySelectorAll('.ms-thumb').forEach(t=>t.classList.remove('active'));
+/* ── THUMBNAIL SWITCH — tự tính index từ DOM, không hardcode ── */
+function switchThumb(thumb){
+  const inner  = thumb.closest('.ms-inner');
+  const cover  = inner.querySelector('.ms-album-cover');
+  const thumbs = Array.from(inner.querySelectorAll('.ms-thumb'));
+
+  thumbs.forEach(t => t.classList.remove('active'));
   thumb.classList.add('active');
-  const src=thumb.querySelector('img')?.src||'';
-  if(src){cover.src=src;cover.style.display='block';}
+
+  const img = thumb.querySelector('img');
+  const src = img ? img.getAttribute('src') : '';
+  if(src){
+    cover.src = src;
+    cover.style.display = 'block';
+  }
+
+  // Cuộn thumbnail vào giữa khung trên mobile
+  thumb.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
 }
 
 /* ── LIGHTBOX STATE ── */
@@ -831,6 +928,13 @@ document.addEventListener('keydown',e=>{
   else if(e.key==='ArrowRight')lbNav(1);
   else if(e.key==='Escape')closeLb();
 });
+  <!-- ═══ MUSIC ═══ -->
+<div id="mbtn"><span id="mnote">♪</span></div>
+<div id="mtip">Nhấn để bật / tắt nhạc</div>
+<audio id="bgm" loop>
+  <source src="Tiger.mp3" type="audio/mpeg">
+  <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mpeg">
+</audio>
 
 // Click backdrop
 document.getElementById('lightbox').addEventListener('click',e=>{
@@ -845,46 +949,19 @@ lbEl.addEventListener('touchend',e=>{
   if(Math.abs(dx)>50)lbNav(dx<0?1:-1);
 },{passive:true});
 
-/* ══════════════════════════════
-   NHẠC NỀN (MỚI THÊM)
-══════════════════════════════ */
-const music = document.getElementById('bgMusic');
-const mBtn  = document.getElementById('musicBtn');
-const mLbl  = document.getElementById('musicLabel');
-let isPlaying = false;
-
-function toggleMusic(){
-  if(isPlaying){
-    music.pause();
-    mBtn.classList.remove('playing');
-    document.getElementById('musicIcon').textContent = '🎵';
-    mLbl.textContent = 'Nhạc';
-    isPlaying = false;
-  } else {
-    music.play().then(()=>{
-      mBtn.classList.add('playing');
-      document.getElementById('musicIcon').textContent = '🎶';
-      mLbl.textContent = 'Đang phát';
-      isPlaying = true;
-    }).catch(()=>{ mLbl.textContent = 'Tap lại'; });
-  }
-}
-
-let autoStarted = false;
-function tryAutoPlay(){
-  if(autoStarted || isPlaying) return;
-  autoStarted = true;
-  music.volume = 0.55;
-  music.play().then(()=>{
-    mBtn.classList.add('playing');
-    document.getElementById('musicIcon').textContent = '🎶';
-    mLbl.textContent = 'Đang phát';
-    isPlaying = true;
-  }).catch(()=>{ autoStarted = false; });
-}
-document.addEventListener('click',    tryAutoPlay, {once:true});
-document.addEventListener('touchend', tryAutoPlay, {once:true, passive:true});
-addEventListener('scroll', tryAutoPlay, {once:true, passive:true});
+// ══ MUSIC ══
+const audio=document.getElementById('bgm'),btn=document.getElementById('mbtn'),tip=document.getElementById('mtip'),note=document.getElementById('mnote');
+let on=false;audio.volume=0.4;
+function showTip(m,ms=3200){tip.textContent=m;tip.classList.add('show');setTimeout(()=>tip.classList.remove('show'),ms)}
+function setOn(s){on=s;btn.classList.toggle('on',s);note.textContent=s?'♫':'♪';s?audio.play():audio.pause()}
+btn.addEventListener('click',()=>setOn(!on));
+window.addEventListener('load',()=>setTimeout(()=>{
+  audio.play().then(()=>{setOn(true);showTip('♪ Đang phát nhạc')}).catch(()=>{
+    showTip('Chạm vào đây để bật nhạc ♪',5000);
+    const u=()=>{setOn(true);document.removeEventListener('click',u);document.removeEventListener('touchstart',u)};
+    document.addEventListener('click',u);document.addEventListener('touchstart',u);
+  });
+},900));
 </script>
 </body>
 </html>
