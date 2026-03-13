@@ -257,6 +257,19 @@ body{background:var(--cream);color:var(--ink);font-family:var(--fn);overflow-x:h
   <h2 class="sec-title">Hành Trình <em>Của Chúng Tôi</em></h2>
   <div class="orn"><div class="orn-dia"></div></div>
 </div>
+  
+  <!-- ══════════════════════════════════════
+  NHẠC NỀN
+══════════════════════════════════════ -->
+<audio id="bgMusic" loop preload="auto">
+  <source src="nhac-cuoi.mp3" type="audio/mpeg">
+  <source src="nhac-cuoi.ogg" type="audio/ogg">
+</audio>
+ 
+<button id="musicBtn" onclick="toggleMusic()" title="Bật / Tắt nhạc">
+  <span id="musicIcon">🎵</span>
+</button>
+<div id="musicLabel">Nhạc</div>
 
 <!--
   ╔═══════════════════════════════════════════════════════╗
@@ -808,6 +821,48 @@ lbEl.addEventListener('touchend',e=>{
   const dx=e.changedTouches[0].clientX-touchX;
   if(Math.abs(dx)>50)lbNav(dx<0?1:-1);
 },{passive:true});
+  // nhac-------------------------------------------------
+  /* ══════════════════════════════════════
+   NHẠC NỀN
+══════════════════════════════════════ */
+const music = document.getElementById('bgMusic');
+const btn   = document.getElementById('musicBtn');
+const lbl   = document.getElementById('musicLabel');
+let isPlaying = false;
+ 
+function toggleMusic(){
+  if(isPlaying){
+    music.pause();
+    btn.classList.remove('playing');
+    document.getElementById('musicIcon').textContent = '🎵';
+    lbl.textContent = 'Nhạc';
+    isPlaying = false;
+  } else {
+    music.play().then(()=>{
+      btn.classList.add('playing');
+      document.getElementById('musicIcon').textContent = '🎶';
+      lbl.textContent = 'Đang phát';
+      isPlaying = true;
+    }).catch(()=>{
+      lbl.textContent = 'Tap lại';
+    });
+  }
+}
+ 
+let autoStarted = false;
+function tryAutoPlay(){
+  if(autoStarted || isPlaying) return;
+  autoStarted = true;
+  music.volume = 0.55;
+  music.play().then(()=>{
+    btn.classList.add('playing');
+    document.getElementById('musicIcon').textContent = '🎶';
+    lbl.textContent = 'Đang phát';
+    isPlaying = true;
+  }).catch(()=>{ autoStarted = false; });
+}
+document.addEventListener('click',    tryAutoPlay, {once:true});
+document.addEventListener('touchend', tryAutoPlay, {once:true, passive:true});
 </script>
 </body>
 </html>
