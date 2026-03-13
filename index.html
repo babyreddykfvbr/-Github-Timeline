@@ -228,10 +228,10 @@ body{background:var(--cream);color:var(--ink);font-family:var(--fn);overflow-x:h
 .ending-sub{font-family:var(--fh);font-size:clamp(16px,2.5vw,22px);font-style:italic;font-weight:300;color:var(--goldlt);position:relative;z-index:1;margin-bottom:32px;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.7;}
 .ending-date{font-size:14px;font-weight:600;letter-spacing:.35em;color:var(--gold);position:relative;z-index:1;margin-bottom:40px;}
 .btn-row{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;position:relative;z-index:1;}
-.back-btn{display:inline-flex;align-items:center;gap:10px;padding:14px 36px;border:1.5px solid var(--gold);background:transparent;color:var(--white);font-size:13px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;text-decoration:none;border-radius:2px;transition:all .25s;}
+.back-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:14px 36px;min-width:200px;border:1.5px solid var(--gold);background:transparent;color:var(--white);font-size:13px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;text-decoration:none;border-radius:2px;transition:all .25s;}
 .back-btn:hover{background:var(--gold);color:var(--red2);}
-.back-btn-ghost{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.3);color:rgba(255,255,255,.76);}
-.back-btn-ghost:hover{background:var(--white);border-color:var(--white);color:var(--red2);}
+.back-btn-ghost{background:transparent;border-color:var(--gold);color:var(--white);}
+.back-btn-ghost:hover{background:var(--gold);border-color:var(--gold);color:var(--red2);}
 
 /* ══════════════════════════════
    NÚT NHẠC NỔI (MỚI THÊM)
@@ -606,7 +606,7 @@ body{background:var(--cream);color:var(--ink);font-family:var(--fn);overflow-x:h
   Đặt file TigerLaFlorVEVO.mp3 cùng thư mục với HTML
 ══════════════════════════════ -->
 <audio id="bgMusic" loop preload="auto">
-  <source src="Tiger.mp3" type="audio/mpeg">
+  <source src="TigerLaFlorVEVO.mp3" type="audio/mpeg">
 </audio>
 
 <button id="musicBtn" onclick="toggleMusic()" title="Bật / Tắt nhạc">
@@ -884,6 +884,7 @@ function tryAutoPlay(){
 }
 document.addEventListener('click',    tryAutoPlay, {once:true});
 document.addEventListener('touchend', tryAutoPlay, {once:true, passive:true});
+addEventListener('scroll', tryAutoPlay, {once:true, passive:true});
 </script>
 </body>
 </html>
