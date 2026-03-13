@@ -232,6 +232,42 @@ body{background:var(--cream);color:var(--ink);font-family:var(--fn);overflow-x:h
 .back-btn:hover{background:var(--gold);color:var(--red2);}
 .back-btn-ghost{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.3);color:rgba(255,255,255,.76);}
 .back-btn-ghost:hover{background:var(--white);border-color:var(--white);color:var(--red2);}
+
+/* ══════════════════════════════
+   NÚT NHẠC NỔI (MỚI THÊM)
+══════════════════════════════ */
+#musicBtn{
+  position:fixed;bottom:24px;right:20px;z-index:8000;
+  width:52px;height:52px;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,#e0ba7a,var(--gold));
+  border:2px solid rgba(255,255,255,.3);
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 20px rgba(0,0,0,.4),0 0 0 0 rgba(201,169,110,.6);
+  transition:transform .2s;
+  -webkit-tap-highlight-color:transparent;
+  animation:fadeUp .9s 1.6s both;
+}
+#musicBtn:hover{transform:scale(1.1);}
+#musicBtn.playing{
+  animation:fadeUp .9s 1.6s both,pulse-ring 1.6s ease-in-out infinite;
+}
+@keyframes pulse-ring{
+  0%  {box-shadow:0 4px 20px rgba(0,0,0,.4),0 0 0 0   rgba(201,169,110,.6);}
+  60% {box-shadow:0 4px 20px rgba(0,0,0,.4),0 0 0 12px rgba(201,169,110,.0);}
+  100%{box-shadow:0 4px 20px rgba(0,0,0,.4),0 0 0 0   rgba(201,169,110,.0);}
+}
+#musicIcon{font-size:22px;line-height:1;color:#6b0909;pointer-events:none;transition:transform .3s;display:block;}
+#musicBtn.playing #musicIcon{animation:spin-note 4s linear infinite;}
+@keyframes spin-note{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+#musicLabel{
+  position:fixed;bottom:8px;right:14px;z-index:8000;
+  font-family:var(--fn);font-size:9px;font-weight:700;
+  letter-spacing:.15em;text-transform:uppercase;
+  color:rgba(255,255,255,.45);text-align:center;width:52px;
+  pointer-events:none;
+  animation:fadeUp .9s 1.6s both;
+}
 </style>
 </head>
 <body>
@@ -257,19 +293,6 @@ body{background:var(--cream);color:var(--ink);font-family:var(--fn);overflow-x:h
   <h2 class="sec-title">Hành Trình <em>Của Chúng Tôi</em></h2>
   <div class="orn"><div class="orn-dia"></div></div>
 </div>
-  
-  <!-- ══════════════════════════════════════
-  NHẠC NỀN
-══════════════════════════════════════ -->
-<audio id="bgMusic" loop preload="auto">
-  <source src="nhac_hay.mp3" type="audio/mpeg">
-  <source src="nhac_hay.ogg" type="audio/ogg">
-</audio>
- 
-<button id="musicBtn" onclick="toggleMusic()" title="Bật / Tắt nhạc">
-  <span id="musicIcon">🎵</span>
-</button>
-<div id="musicLabel">Nhạc</div>
 
 <!--
   ╔═══════════════════════════════════════════════════════╗
@@ -578,6 +601,19 @@ body{background:var(--cream);color:var(--ink);font-family:var(--fn);overflow-x:h
   <div class="lb-film" id="lbFilm"></div>
 </div>
 
+<!-- ══════════════════════════════
+  NHẠC NỀN (MỚI THÊM)
+  Đặt file TigerLaFlorVEVO.mp3 cùng thư mục với HTML
+══════════════════════════════ -->
+<audio id="bgMusic" loop preload="auto">
+  <source src="TigerLaFlorVEVO.mp3" type="audio/mpeg">
+</audio>
+
+<button id="musicBtn" onclick="toggleMusic()" title="Bật / Tắt nhạc">
+  <span id="musicIcon">🎵</span>
+</button>
+<div id="musicLabel">Nhạc</div>
+
 <script>
 /* ── GOLD WATER RIPPLE ── */
 (function(){
@@ -595,7 +631,7 @@ body{background:var(--cream);color:var(--ink);font-family:var(--fn);overflow-x:h
   class Ripple {
     constructor(x, y){
       this.x = x; this.y = y;
-      this.r = 2;           // start tiny
+      this.r = 2;
       this.maxR = Math.random()*220 + 160;
       this.speed = Math.random()*1.2 + 0.7;
       this.alpha = 0.7;
@@ -617,27 +653,23 @@ body{background:var(--cream);color:var(--ink);font-family:var(--fn);overflow-x:h
     get dead(){ return this.r >= this.maxR; }
   }
 
-  // Drop = small gold ellipse + splash lines
   class Drop {
     constructor(x, y){
       this.x = x; this.y = y;
       this.vy = 0; this.ay = 2.2;
-      this.phase = 'fall';   // fall → splash
+      this.phase = 'fall';
       this.splashT = 0;
       this.rippleSpawned = 0;
-      // how many rings this drop spawns (2–4)
       this.rings = Math.floor(Math.random()*3)+2;
-      this.rippleInterval = 10; // frames between rings
+      this.rippleInterval = 10;
     }
     update(){
       if(this.phase === 'fall'){
         this.vy += this.ay;
         this.y  += this.vy;
-        // "land" 10px below spawn
         if(this.vy > 18){ this.phase = 'splash'; this.splashT = 0; }
       } else {
         this.splashT++;
-        // spawn rings staggered
         const shouldSpawn = this.splashT % this.rippleInterval === 0;
         if(shouldSpawn && this.rippleSpawned < this.rings){
           ripples.push(new Ripple(this.x, this.y));
@@ -648,7 +680,6 @@ body{background:var(--cream);color:var(--ink);font-family:var(--fn);overflow-x:h
     draw(){
       if(this.phase !== 'fall') return;
       rx.save();
-      // drop body
       const g = rx.createRadialGradient(this.x, this.y-2, 1, this.x, this.y, 5);
       g.addColorStop(0,  'rgba(255,235,160,0.95)');
       g.addColorStop(0.5,'rgba(201,169,110,0.85)');
@@ -657,7 +688,6 @@ body{background:var(--cream);color:var(--ink);font-family:var(--fn);overflow-x:h
       rx.beginPath();
       rx.ellipse(this.x, this.y, 4, 7, 0, 0, Math.PI*2);
       rx.fill();
-      // highlight
       rx.fillStyle = 'rgba(255,245,200,0.7)';
       rx.beginPath();
       rx.ellipse(this.x-1, this.y-2, 1.2, 2.5, -0.3, 0, Math.PI*2);
@@ -669,7 +699,6 @@ body{background:var(--cream);color:var(--ink);font-family:var(--fn);overflow-x:h
 
   const drops = [];
 
-  // Auto-spawn drops at random positions on hero
   function spawnDrop(){
     const w = rc.width, h = rc.height;
     const x = w*0.2 + Math.random()*w*0.6;
@@ -677,15 +706,11 @@ body{background:var(--cream);color:var(--ink);font-family:var(--fn);overflow-x:h
     drops.push(new Drop(x, y - 40));
   }
 
-  // Initial burst of 3 drops
   for(let i=0;i<3;i++) setTimeout(spawnDrop, i*500);
-  // Then periodic
   setInterval(spawnDrop, 1800);
 
   function rLoop(){
     rx.clearRect(0, 0, rc.width, rc.height);
-
-    // Draw splash circles on "landing" point
     for(let i=drops.length-1; i>=0; i--){
       drops[i].update();
       drops[i].draw();
@@ -784,7 +809,6 @@ function showPhoto(idx){
     img.src=src;
     img.style.display='block';
     ph.style.display='none';
-    // retrigger animation
     img.style.animation='none';
     requestAnimationFrame(()=>{img.style.animation='lbIn .28s ease';});
   } else {
@@ -794,7 +818,6 @@ function showPhoto(idx){
   document.getElementById('lbCounter').textContent=(lbIdx+1)+' / '+lbPhotos.length;
   document.getElementById('lbPrev').classList.toggle('hide',lbIdx===0);
   document.getElementById('lbNext').classList.toggle('hide',lbIdx===lbPhotos.length-1);
-  // filmstrip
   document.querySelectorAll('#lbFilm .lb-ft').forEach((t,i)=>t.classList.toggle('active',i===lbIdx));
   const act=document.querySelector('#lbFilm .lb-ft.active');
   if(act)act.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
@@ -821,43 +844,41 @@ lbEl.addEventListener('touchend',e=>{
   const dx=e.changedTouches[0].clientX-touchX;
   if(Math.abs(dx)>50)lbNav(dx<0?1:-1);
 },{passive:true});
-  // nhac-------------------------------------------------
-  /* ══════════════════════════════════════
-   NHẠC NỀN
-══════════════════════════════════════ */
+
+/* ══════════════════════════════
+   NHẠC NỀN (MỚI THÊM)
+══════════════════════════════ */
 const music = document.getElementById('bgMusic');
-const btn   = document.getElementById('musicBtn');
-const lbl   = document.getElementById('musicLabel');
+const mBtn  = document.getElementById('musicBtn');
+const mLbl  = document.getElementById('musicLabel');
 let isPlaying = false;
- 
+
 function toggleMusic(){
   if(isPlaying){
     music.pause();
-    btn.classList.remove('playing');
+    mBtn.classList.remove('playing');
     document.getElementById('musicIcon').textContent = '🎵';
-    lbl.textContent = 'Nhạc';
+    mLbl.textContent = 'Nhạc';
     isPlaying = false;
   } else {
     music.play().then(()=>{
-      btn.classList.add('playing');
+      mBtn.classList.add('playing');
       document.getElementById('musicIcon').textContent = '🎶';
-      lbl.textContent = 'Đang phát';
+      mLbl.textContent = 'Đang phát';
       isPlaying = true;
-    }).catch(()=>{
-      lbl.textContent = 'Tap lại';
-    });
+    }).catch(()=>{ mLbl.textContent = 'Tap lại'; });
   }
 }
- 
+
 let autoStarted = false;
 function tryAutoPlay(){
   if(autoStarted || isPlaying) return;
   autoStarted = true;
   music.volume = 0.55;
   music.play().then(()=>{
-    btn.classList.add('playing');
+    mBtn.classList.add('playing');
     document.getElementById('musicIcon').textContent = '🎶';
-    lbl.textContent = 'Đang phát';
+    mLbl.textContent = 'Đang phát';
     isPlaying = true;
   }).catch(()=>{ autoStarted = false; });
 }
